@@ -10,7 +10,7 @@ import { Contact } from '../contact.model';
   ]
 })
 export class ContactDetailComponent implements OnInit{
-  contact: Contact;
+  contact: Contact; 
 
   constructor() {}
 
