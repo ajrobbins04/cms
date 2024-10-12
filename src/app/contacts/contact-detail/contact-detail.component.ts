@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { Contact } from '../contact.model';
 
 @Component({
@@ -10,7 +10,9 @@ import { Contact } from '../contact.model';
   ]
 })
 export class ContactDetailComponent implements OnInit{
-  contact: Contact; 
+
+  // is sent by its parent, ContactsComponent, to render
+  @Input() contact: Contact; 
 
   constructor() {}
 

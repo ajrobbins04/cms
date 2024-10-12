@@ -13,7 +13,10 @@ export class ContactItemComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {}
 
+  // will inform its parent (ContactListComponent) 
+  // when a contact is selected
   onSelected() {
     this.contactSelected.emit();
   }
+
 }

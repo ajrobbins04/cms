@@ -6,7 +6,11 @@ import { Contact } from './contact.model';
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.css']
 })
+
 export class ContactsComponent implements OnInit {
+
+  // will be sent by ContactListsComponent to
+  // be passed on to ContactDetailsComponent
   selectedContact: Contact;
   
   constructor() {}
