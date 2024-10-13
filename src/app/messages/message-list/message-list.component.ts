@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Message } from '../message.model';
 
 @Component({
@@ -7,7 +7,7 @@ import { Message } from '../message.model';
   styleUrl: './message-list.component.css'
 })
 
-export class MessageListComponent {
+export class MessageListComponent implements OnInit{
 
     messages: Message[] = [
       new Message('1', 'Hello World', 'This is a sample message from Alice.', 'Alice'),
@@ -17,7 +17,8 @@ export class MessageListComponent {
     ];
 
     constructor() {}
-
+    ngOnInit(): void {
+    }
     onAddMessage(message: Message) {
       this.messages.push(message);
     }

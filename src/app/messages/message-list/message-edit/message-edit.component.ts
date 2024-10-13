@@ -15,8 +15,8 @@ export class MessageEditComponent {
 
   constructor() {}
  
-  onSendMessage() {
-
+  onSendMessage(event: Event) {
+    event.preventDefault();
     const subjectVal = this.subjectRef.nativeElement.value;
     const msgTextVal = this.msgTextRef.nativeElement.value;
     const message = new Message('1', subjectVal, msgTextVal, this.currentSender);
