@@ -2,12 +2,12 @@
     <div class="panel-heading">
         <div class="row">
             <div class="col-xs-12">
-                <h3 class="panel-title col-xs-12">{{ contact?.name }}</h3>
+                <h3 class="contact-detail-header col-xs-12">{{ contact?.name }}</h3>
             </div>
         </div>
-        <div class="row">
+        <div class="row text-center">
             <div class="col-xs-12">
-                <img [src]="contact?.imageUrl" alt="{{ contact?.name }}" class="img-responsive" style="max-width: 50px;">
+                <img [src]="contact?.imageUrl" alt="{{ contact?.name }}" class="img-thumbnail pull-left" style="max-width: 75px;">
                 <button class="btn btn-danger pull-right">Delete</button>
                 <button class="btn btn-primary pull-right">Edit</button>
             </div>
