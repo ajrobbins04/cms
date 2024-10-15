@@ -4,7 +4,9 @@ import { Message } from '../../message.model';
 @Component({
   selector: 'cms-message-edit',
   templateUrl: './message-edit.component.html',
-  styleUrl: './message-edit.component.css'
+  styleUrls: [
+    '../../../app.component.css',
+    './message-edit.component.css']
 })
 export class MessageEditComponent {
   currentSender = 'Amber';
