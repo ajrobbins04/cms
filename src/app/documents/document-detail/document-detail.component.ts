@@ -3,7 +3,9 @@ import { Document } from '../document.model';
 @Component({
   selector: 'cms-document-detail',
   templateUrl: './document-detail.component.html',
-  styleUrl: './document-detail.component.css'
+  styleUrls: [
+    '../../app.component.css',
+    './document-detail.component.css']
 })
 export class DocumentDetailComponent {
   @Input() document: Document;

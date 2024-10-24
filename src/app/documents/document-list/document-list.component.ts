@@ -4,6 +4,7 @@ import { Document } from '../document.model';
   selector: 'cms-document-list',
   templateUrl: './document-list.component.html',
   styleUrls: [
+    '../../app.component.css',
     './document-list.component.css']
 })
 export class DocumentListComponent implements OnInit {
