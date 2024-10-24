@@ -2,9 +2,17 @@
     width: 9rem;
     height: 11rem;
     margin: 2px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     border: solid thin darkgrey;
     float: left;
-    padding: .25rem
+    padding: .25rem;
 }
   
+@media (min-width: 600px) {
+    .documentDiv {
+        width: 10.35rem;
+        height: 12.65rem;
+        font-size: 1.3rem;
+        padding: .35rem;
+    }
+}

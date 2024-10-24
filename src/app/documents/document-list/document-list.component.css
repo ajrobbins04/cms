@@ -1,7 +1,7 @@
 .center-panel {
     margin-left: auto;
     margin-right: auto;
-    width: 38rem;
+    width: max(vw,42rem);
 }
 
 .title {
