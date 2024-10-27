@@ -7,8 +7,23 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
 })
 
 export class ContactService {
+    contactSelectedEvent = new EventEmitter<Contact>();
     contacts: Contact[] = [];
     constructor() {
         this.contacts = MOCKCONTACTS;
+    }
+
+    getContacts() {
+        // returns copy of contacts array
+        return this.contacts.slice();
+    }
+
+    getContact(id: string) {
+        for (let contact of this.contacts) {
+            if (contact.id === id) {
+                return contact;
+            }
+        }
+        return null;
     }
 }
