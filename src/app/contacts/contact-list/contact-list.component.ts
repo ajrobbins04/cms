@@ -19,7 +19,6 @@ export class ContactListComponent implements OnInit {
 
   ngOnInit() {
     this.contacts = this.contactService.getContacts();
-
   }
 
   // called when its child component emits an event to 

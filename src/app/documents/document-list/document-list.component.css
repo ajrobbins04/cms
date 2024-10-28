@@ -1,6 +1,7 @@
-.center-panel {
-    margin-left: auto;
-    margin-right: auto;
+.center-panel .row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
 }
 
 .title {
