@@ -20,6 +20,7 @@ import { DropdownDirective } from './shared/dropdown.directive';
 import { DocumentService } from './documents/document.service';
 import { MessageService } from './messages/message.service';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
+import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
 
 @NgModule({
   declarations: [
@@ -38,13 +39,11 @@ import { DocumentEditComponent } from './documents/document-edit/document-edit.c
     MessageItemComponent,
     MessageEditComponent,
     DropdownDirective,
-    DocumentEditComponent
+    DocumentEditComponent,
+    ContactEditComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [DocumentService, MessageService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
