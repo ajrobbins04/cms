@@ -32,7 +32,7 @@ export class ContactService {
 
     getContacts() {
         // returns copy of contacts array
-        return this.contacts.slice(0,11);
+        return this.contacts.slice();
     }
 
     getContact(id: string) {
@@ -50,7 +50,7 @@ export class ContactService {
         this.maxContactId += 1;
         newContact.id = this.maxContactId.toString();
         this.contacts.push(newContact);
-        const contactsListClone = this.contacts.slice();
+        const contactsListClone = this.getContacts();
         this.contactListChangedEvent.next(contactsListClone);
     }
     updateContact(originalContact: Contact, newContact: Contact) {
@@ -63,7 +63,7 @@ export class ContactService {
         }
         newContact.id = originalContact.id;
         this.contacts[pos] = newContact;
-        const contactsListClone = this.contacts.slice();
+        const contactsListClone = this.getContacts();
         this.contactListChangedEvent.next(contactsListClone);
     }
 
@@ -76,7 +76,7 @@ export class ContactService {
             return;
         }
         this.contacts.splice(pos, 1);
-        const contactsListClone = this.contacts.slice();
+        const contactsListClone = this.getContacts();
         this.contactListChangedEvent.next(contactsListClone);
     }
 }
