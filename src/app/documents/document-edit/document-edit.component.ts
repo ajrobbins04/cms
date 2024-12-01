@@ -16,7 +16,7 @@ export class DocumentEditComponent implements OnInit {
   document: Document;         // edited 
   editMode: boolean = false;
 
-  @ViewChild('f', { static: false }) slForm: NgForm;
+  //@ViewChild('f', { static: false }) slForm: NgForm;
 
   constructor(
     private documentService: DocumentService,
