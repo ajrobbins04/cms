@@ -1,1 +1,67 @@
-<p>document-edit works!</p>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <!--local reference to ngForm element created called 'f'-->
+        <form id="document-edit" (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="name">Document Title:</label>
+            <!--ngModel applied here & url for two-way data binding-->
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              #name="ngModel" 
+              [ngModel]="document?.name"
+              required
+              size="120"
+              max="120">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="description">Document Description:</label>
+            <input
+              type="text"
+              id="description"
+              name="description"
+              class="form-control"
+              [ngModel]="document?.description"
+              size="120"
+              max="255">
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-sm-12 form-group">
+            <label for="url">Document URL:</label>
+            <input
+              type="text"
+              id="url"
+              name="url"
+              class="form-control"
+              #url="ngModel"
+              [ngModel]="document?.url"
+              required
+              size="150"
+              max="255">
+          </div>
+        </div>
+        <div *ngIf="!name.valid && name.touched || !url.valid && url.touched" class="alert alert-danger">
+            The Document Title and Document URL are required fields.
+        </div>
+          
+  
+        <div class="row">
+          <div class="col-xs-12 btn-toolbar">
+            <button type="submit" class="btn btn-success" [disabled]="!f.valid">Save</button>
+            <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+          </div>
+        </div>
+  
+        </form>
+  
+    </div>
+  </div>
+  
