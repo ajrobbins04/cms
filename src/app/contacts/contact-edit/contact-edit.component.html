@@ -49,12 +49,11 @@
                 [ngModel]="contact?.phone"
                 #phone="ngModel"
                 class="form-control"
-                [class.is-invalid]="phone.touched && !phone.valid"
-                required
+                [class.invalid]="phone.value && !phone.valid"
                 size="150"
                 max="255"
                 pattern="\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*">
-                <div *ngIf="phone.touched && !phone.valid" class="alert alert-danger">
+                <div *ngIf="phone.value && !phone.valid" class="alert alert-danger">
                     Enter a valid phone number.
                 </div>
             </div>
