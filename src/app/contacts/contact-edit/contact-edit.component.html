@@ -77,8 +77,13 @@
         <div class="row">
             <div class="col-sm-12 form-group">
             <label for="groupList">Group Contacts:</label>
-
-            <div class="row" id="groupList"
+            <!--the drag and drop's drop zone-->
+            <div 
+                cdkDropList
+                [cdkDropListData]="groupContacts"
+                (cdkDropListDropped)="addToGroup($event)"
+                class="row" 
+                id="groupList"
                 style="min-height: 3rem;" >
 
                 <div *ngFor="let contact of groupContacts; let i = index">
