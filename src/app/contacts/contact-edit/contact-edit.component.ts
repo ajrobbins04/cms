@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { Contact } from '../contact.model';
@@ -26,6 +27,8 @@ export class ContactEditComponent implements OnInit {
   ngOnInit(): void {
       
   }
+
+  onSubmit(form: NgForm) {}
 
   onCancel() {
     // go back to the documents list

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Document } from '../document.model';
@@ -15,8 +15,6 @@ export class DocumentEditComponent implements OnInit {
   originalDocument: Document; // unedited document
   document: Document;         // edited 
   editMode: boolean = false;
-
-  //@ViewChild('f', { static: false }) slForm: NgForm;
 
   constructor(
     private documentService: DocumentService,
