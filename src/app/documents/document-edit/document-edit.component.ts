@@ -75,9 +75,6 @@ export class DocumentEditComponent implements OnInit {
     this.onCancel();
   }
 
-  // editing doc requires call to service updateDocument()
-
-
   onCancel() {
     // go back to the documents list
     this.router.navigate(['/documents']);
