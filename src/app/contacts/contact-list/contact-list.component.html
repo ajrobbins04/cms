@@ -10,13 +10,18 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="list-group">
+        <!-- Iterate through each group -->
+        <div *ngFor="let group of groupedContacts">
+            <h4>{{ group.name }}</h4>
             <!--the drag and drop element-->
-            <cms-contact-item
-                *ngFor="let contactEl of contacts"
-                [contact]="contactEl"
-                cdkDrag
-                [cdkDragData]="contactEl"></cms-contact-item>
+            <div class="row">
+                <cms-contact-item
+                    *ngFor="let contact of group.members"
+                    [contact]="contact"
+                    cdkDrag
+                    [cdkDragData]="contact">
+                </cms-contact-item>
+            </div>
         </div>
     </div>
 </div>

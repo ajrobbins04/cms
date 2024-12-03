@@ -81,8 +81,9 @@
             <div 
                 cdkDropList
                 [cdkDropListData]="groupContacts"
+                [cdkDropListConnectedTo]="['contactsList']"
                 (cdkDropListDropped)="addToGroup($event)"
-                class="row" 
+                class="row group-list" 
                 id="groupList"
                 style="min-height: 3rem;" >
 

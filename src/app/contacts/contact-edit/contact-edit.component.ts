@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 
@@ -10,6 +10,7 @@ import { ContactService } from '../contact.service';
   templateUrl: './contact-edit.component.html',
   styleUrl: './contact-edit.component.css'
 })
+
 export class ContactEditComponent implements OnInit {
 
   originalContact: Contact; // unedited contact
@@ -78,17 +79,22 @@ export class ContactEditComponent implements OnInit {
     return false;
   }
 
-  addToGroup(event: any): void {
-    // extract dragged contact
-    const selectedContact: Contact = event.dragData;
+  addToGroup(event: CdkDragDrop<any[]>): void {
 
+    if (event.previousContainer === event.container) {
+      return;
+    }
+    
+    // extract dragged contact
+    const draggedContact: Contact = event.item.data;
+  
     // helper method returns true if contact is invalid
-    if (this.isInvalidContact(selectedContact)) {
+    if (this.isInvalidContact(draggedContact)) {
       return; 
     }
   
     // add the valid contact to groupContacts
-    this.groupContacts.push(selectedContact);
+    this.groupContacts.push(draggedContact);
   }
 
   onRemoveItem(index: number): void {

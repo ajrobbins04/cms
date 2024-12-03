@@ -43,6 +43,20 @@ export class ContactService {
         }
         return null;
     }
+
+    getGroupedContacts() {
+        // retrieve each non-null group
+        const teams = this.contacts.filter(contact => contact.group);
+
+        // map each group to an object with its name and members
+        const groups = teams.map(team => ({
+            name: team.name,
+            members: team.group
+        }));
+ 
+        return groups;
+    }
+
     addContact(newContact: Contact) {
         if (!newContact) {
             return;

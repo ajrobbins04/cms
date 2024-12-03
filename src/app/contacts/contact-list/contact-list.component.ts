@@ -16,12 +16,14 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit {
 
   contacts: Contact[] = [];
+  groupedContacts: { name: string, members: Contact[] }[] = [];
   private subscription: Subscription;
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
-    this.contacts = this.contactService.getContacts();
+    //this.contacts = this.contactService.getContacts();
+    this.groupedContacts = this.contactService.getGroupedContacts();
 
     this.subscription = this.contactService.contactListChangedEvent
     .subscribe((contacts: Contact[]) => {
