@@ -10,10 +10,7 @@
         </div>
     </div>
     <div class="panel-body">
-        <div 
-            class="row"
-            cdkDropList
-            [cdkDropListData]="contacts" >
+        <div class="row">
             <!--the draggable element-->
             <cms-contact-item
                 *ngFor="let contact of contacts"

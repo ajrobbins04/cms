@@ -81,18 +81,15 @@
             <div 
                 class="row" 
                 id="groupList"
-                style="min-height: 4rem;"
+                style="min-height: 3rem;"
                 cdkDropList
-                [cdkDropListData]="contact"
-                [cdkDropListConnectedTo]="groupContacts"
-                (cdkDropListDropped)="addToGroup($event)"
-                
-                [cdkDropListConnectedTo]="['contactsList']" 
-                (cdkDropListDropped)="addToGroup($event)" >
+                [cdkDropListData]="groupContacts"
+                (cdkDropListDropped)="addToGroup($event)">
 
                 <div *ngFor="let contact of groupContacts; let i = index">
                     <cms-contact-item 
-                        class="col-sm-11">
+                        class="col-sm-11"
+                        [contact]="contact">
                     </cms-contact-item>
                     <button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button>
                 </div>

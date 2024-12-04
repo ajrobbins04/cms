@@ -74,18 +74,17 @@ export class ContactEditComponent implements OnInit {
         return true;
       }
     }
-
     // the contact is valid if it reaches this point in the function
     return false;
   }
 
-  addToGroup(event: CdkDragDrop<Contact[]>): void {
+  addToGroup(event: CdkDragDrop<Contact[]>) {
 
+    // check if the item is dropped in the same container
     if (event.previousContainer === event.container) {
       return;
     }
-    
-    // extract dragged contact
+  
     const draggedContact: Contact = event.item.data;
   
     // helper method returns true if contact is invalid

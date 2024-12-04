@@ -16,7 +16,6 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit, OnDestroy {
 
   contacts: Contact[] = [];
-  //groupedContacts: { name: string, members: Contact[] }[] = [];
   private subscription: Subscription;
 
   constructor(private contactService: ContactService) {}
