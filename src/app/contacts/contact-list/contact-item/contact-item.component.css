@@ -1,0 +1,8 @@
+.draggable-contact {
+    margin: 5px 0;
+    cursor: grab; /* Indicate draggable state */
+}
+  
+.draggable-contact:active {
+    cursor: grabbing;
+}

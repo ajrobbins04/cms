@@ -13,7 +13,7 @@ import { ContactService } from '../contact.service';
   ]
 })
 
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnInit, OnDestroy {
 
   contacts: Contact[] = [];
   groupedContacts: { name: string, members: Contact[] }[] = [];
@@ -22,12 +22,19 @@ export class ContactListComponent implements OnInit {
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
-    //this.contacts = this.contactService.getContacts();
-    this.groupedContacts = this.contactService.getGroupedContacts();
+
+    // get all individual contacts
+    this.contacts = this.contactService
+      .getContacts()
+      .filter(contact => !contact.group);
+
+    // get contacts grouped by departments
+    this.groupedContacts = this.contactService
+      .getGroupedContacts();
 
     this.subscription = this.contactService.contactListChangedEvent
     .subscribe((contacts: Contact[]) => {
-      this.contacts = contacts;
+      this.contacts = contacts.filter(contact => !contact.group); 
     })
   }
 

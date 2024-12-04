@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 
@@ -79,7 +79,7 @@ export class ContactEditComponent implements OnInit {
     return false;
   }
 
-  addToGroup(event: CdkDragDrop<any[]>): void {
+  addToGroup(event: CdkDragDrop<Contact[]>): void {
 
     if (event.previousContainer === event.container) {
       return;
@@ -141,4 +141,26 @@ export class ContactEditComponent implements OnInit {
     // go back to the documents list
     this.router.navigate(['/contacts']);
   }
+
+  /*onDrop(event: CdkDragDrop<Contact[]>, newContact: Contact) {
+    if (event.previousContainer !== event.container) {
+      transferArrayItem(
+        event.previousContainer.data,
+        this.groupContacts,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+  }*/
+
+  /*onUngroupedDrop(event: CdkDragDrop<Contact[]>) {
+    if (event.previousContainer !== event.container) {
+      transferArrayItem(
+        event.previousContainer.data,
+        this.contacts,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+  }*/
 }

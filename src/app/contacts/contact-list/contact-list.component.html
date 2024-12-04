@@ -13,13 +13,14 @@
         <!-- Iterate through each group -->
         <div *ngFor="let group of groupedContacts">
             <h4>{{ group.name }}</h4>
-            <!--the drag and drop element-->
-            <div class="row">
+            <div 
+                class="row"
+                cdkDropList
+                [cdkDropListData]="group.members" >
+                <!--the draggable element-->
                 <cms-contact-item
                     *ngFor="let contact of group.members"
-                    [contact]="contact"
-                    cdkDrag
-                    [cdkDragData]="contact">
+                    [contact]="contact">
                 </cms-contact-item>
             </div>
         </div>

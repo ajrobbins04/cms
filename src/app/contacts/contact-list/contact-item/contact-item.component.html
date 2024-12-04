@@ -1,7 +1,9 @@
 <a 
+    cdkDrag
+    [cdkDragData]="contact"
     routerLinkActive="active"
     [routerLink]="[contact.id]"
-    class="list-group-item clearfix"
+    class="list-group-item clearfix draggable-contact"
     (click)="onSelected()">
     <div class="media">
         <div class="media-body">
