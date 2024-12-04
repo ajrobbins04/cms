@@ -16,7 +16,7 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit, OnDestroy {
 
   contacts: Contact[] = [];
-  groupedContacts: { name: string, members: Contact[] }[] = [];
+  //groupedContacts: { name: string, members: Contact[] }[] = [];
   private subscription: Subscription;
 
   constructor(private contactService: ContactService) {}
@@ -28,13 +28,10 @@ export class ContactListComponent implements OnInit, OnDestroy {
       .getContacts()
       .filter(contact => !contact.group);
 
-    // get contacts grouped by departments
-    this.groupedContacts = this.contactService
-      .getGroupedContacts();
-
-    this.subscription = this.contactService.contactListChangedEvent
-    .subscribe((contacts: Contact[]) => {
-      this.contacts = contacts.filter(contact => !contact.group); 
+    this.subscription = this.contactService
+      .contactListChangedEvent
+      .subscribe((contacts: Contact[]) => {
+        this.contacts = contacts.filter(contact => !contact.group); 
     })
   }
 
