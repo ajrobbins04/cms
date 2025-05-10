@@ -1,0 +1,13 @@
+.vcenter {
+    display: flex; 
+    align-items: center;
+}
+
+.media-vcenter {
+    vertical-align: middle;
+}
+
+.panel-title {
+    font-size: 23px;
+    font-weight: bold;
+}

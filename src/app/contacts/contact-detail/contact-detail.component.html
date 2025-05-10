@@ -1,20 +1,26 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-      <div class="row"> 
-        <div class="col-sm-8">
-          <h4 class="panel-title">{{ contact.name }}</h4>
-          <img [src]="contact.imageUrl" alt="{{ contact.name }}" class="img-responsive" style="max-width: 50px;">
-        </div>
-        <div class="col-sm-4 text-right">
-            <div class="btn-group">
-              <button class="btn btn-primary btn-sm" style="margin-right: 5px">Edit</button>
-              <button class="btn btn-danger btn-sm">Delete</button>
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4 class="panel-title" style="margin: 1.2rem 0rem 0.75rem 0rem;">{{ contact?.name }}</h4>
+                  </div>
             </div>
-          </div>
-      </div>
+            <div class="media">
+                <div class="media-left">
+                    <img src="{{ contact?.imageUrl }}" alt="{{ contact?.name }}" style="max-width: 75px;">
+                </div>
+                <div class="media-body media-vcenter">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" style="margin-right: 5px;">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="panel-body">
-      <p><span>Email:</span> {{ contact.email }}</p>
-      <p><span>Phone:</span> {{ contact.phone }}</p>
+        <p class="small"><strong>Email: </strong> {{ contact?.email }}</p>
+        <p class="small"><strong>Phone: </strong> {{ contact?.phone }}</p>
     </div>
-  </div>
+</div>

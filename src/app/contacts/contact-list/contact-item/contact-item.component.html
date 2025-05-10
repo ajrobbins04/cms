@@ -1,1 +1,13 @@
-<p>contact-item works!</p>
+<a href="#" class="list-group-item clearfix">
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">{{ contact.name }}</h4>
+        </div>
+        <div class="media-right">
+            <img 
+                src="{{ contact.imageUrl }}" 
+                alt="{{ contact.name }}" 
+                style="max-width: 50px;">
+        </div>
+    </div>
+</a>
