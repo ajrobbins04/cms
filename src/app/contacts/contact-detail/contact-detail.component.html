@@ -12,8 +12,8 @@
                 </div>
                 <div class="media-body media-vcenter">
                     <div class="pull-right">
-                        <button class="btn btn-primary" style="margin-right: 5px;">Edit</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <a class="btn btn-primary" style="margin-right: 5px;" routerLink="edit">Edit</a>
+                        <a class="btn btn-danger" (click)="onDelete()">Delete</a>
                     </div>
                 </div>
             </div>

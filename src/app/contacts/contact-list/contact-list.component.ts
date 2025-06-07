@@ -19,6 +19,13 @@ export class ContactListComponent implements OnInit {
     this.contacts = this.contactService
     .getContacts()
     .filter(contact => !contact.group);
+
+    this.contactService.contactChangedEvent
+      .subscribe(
+        (contacts: Contact[]) => {
+          this.contacts = contacts.filter(contact => !contact.group);
+        }
+      );
   }
 
   // This method is called when a contact is selected in the contact-item component
