@@ -11,12 +11,14 @@ import { ContactService } from '../contact.service';
   ]
 })
 export class ContactListComponent implements OnInit {
-  @Output() contactSelectedEvent = new EventEmitter<Contact>();
 
   contacts: Contact[] = [];
   constructor(private contactService: ContactService) {}
+
   ngOnInit() {
-    this.contacts = this.contactService.getContacts().filter(contact => !contact.group);
+    this.contacts = this.contactService
+    .getContacts()
+    .filter(contact => !contact.group);
   }
 
   // This method is called when a contact is selected in the contact-item component
