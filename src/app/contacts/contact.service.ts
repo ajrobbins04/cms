@@ -49,7 +49,7 @@ export class ContactService {
       contact.group && contact.email.trim() === '' && contact.phone.trim() === ''
     );
   }
-  
+
   addContact(newContact: Contact) {
     if (!newContact) {
       return;
@@ -70,9 +70,9 @@ export class ContactService {
         return;
     }
     // Find the index (position) of the original contact in the contacts array
-    const pos = this.contacts.indexOf(originalContact)
+    const pos = this.contacts.findIndex(c => c.id === originalContact.id);
     if (pos < 0) {
-        return;
+      return;
     }
     // Set the new contact's ID to the original contact's ID to simulate an update
     newContact.id = originalContact.id;
@@ -80,9 +80,18 @@ export class ContactService {
     // Update the contact at the found position with the new contact
     this.contacts[pos] = newContact;
 
+    // Update contact references inside any groups
+    this.contacts.forEach(contact => {
+      if (contact.group && Array.isArray(contact.group)) {
+        const groupIndex = contact.group.findIndex(c => c.id === originalContact.id);
+        if (groupIndex !== -1) {
+          contact.group[groupIndex] = newContact;
+        }
+      }
+    });
+
     // Emit a copy of the updated contacts list
-    const contactsListClone = this.getContacts();
-    this.contactListChangedEvent.next(contactsListClone);
+    this.contactListChangedEvent.next(this.getContacts());
 }
 
   deleteContact(contact: Contact) {
@@ -97,7 +106,13 @@ export class ContactService {
     // Remove the contact from the contacts array by its position
     this.contacts.splice(pos, 1);
     
-    const contactsListClone = this.getContacts();
-    this.contactListChangedEvent.next(contactsListClone);
+    // Remove from any group arrays
+    this.contacts.forEach(c => {
+      if (Array.isArray(c.group)) {
+        c.group = c.group.filter(groupMember => groupMember.id !== contact.id);
+      }
+    });
+
+    this.contactListChangedEvent.next(this.getContacts());
   }
 }

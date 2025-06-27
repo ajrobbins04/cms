@@ -24,8 +24,8 @@ export class ContactListComponent implements OnInit {
   
 
     this.subscription = this.contactService.contactListChangedEvent.subscribe(
-      (contacts: Contact[]) => {
-        this.contacts = contacts;
+      (updatedContacts: Contact[]) => {
+        this.contacts = updatedContacts;
         this.buildGroupedContacts();
       }
     );
