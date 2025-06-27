@@ -10,10 +10,23 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="list-group">
-            <cms-contact-item 
-                *ngFor="let contactEl of contacts" 
-                [contact]="contactEl"></cms-contact-item>
+        <div *ngFor="let group of deptGroupedContacts">
+          <h4>{{ group.name }}</h4>
+          
+          <div
+            cdkDropList
+            [cdkDropListData]="group.members"
+            class="row available-contacts-zone"
+          >
+            <cms-contact-item
+              *ngFor="let contact of group.members"
+              [contact]="contact"
+              cdkDrag
+              (cdkDragStarted)="onDragStart(contact)"
+            ></cms-contact-item>
+          </div>
         </div>
-    </div>
+      </div>
+      
 </div>
+
