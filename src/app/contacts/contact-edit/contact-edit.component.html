@@ -7,6 +7,7 @@
             <input
               type="text"
               id="name"
+              name="name"
               [ngModel]="contact?.name"
               #name="ngModel"
               class="form-control required"
@@ -71,31 +72,29 @@
               max="255">
           </div>
         </div>
-  
         <div class="row">
-          <div class="col-sm-12 form-group">
-            <label for="groupList">Group Contacts:</label>
-  
-            <div 
-                id="groupList"
-                class="row cdk-drop-list"
+            <div class="col-sm-12 form-group">
+              <label for="groupList">Group Contacts:</label>
+    
+              <div class="row" id="groupList"
                 cdkDropList
-                (cdkDropListDropped)="addToGroup($event)"
-                style="min-height: 6rem; border: 2px solid green;" >
-  
-              <div *ngFor="let contact of groupContacts; let i = index">
-           
-                  <cms-contact-item 
-                    class="col-sm-11" 
-                    [contact]="contact"></cms-contact-item>
-                  <button class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)">X</button>
-              
-              </div>
-              <span class="dragMsg" *ngIf="groupContacts?.length < 1">Drag contacts in group here</span>
+                [cdkDropListData]="groupContacts"
+                [cdkDropListConnectedTo]="['contactList']"
+                (cdkDropListDropped)="onDrop($event)"
+                style="min-height: 6rem;" >
+
+                <!-- Only show group contacts if any exist -->
+                <div *ngFor="let contact of groupContacts; let i = index">
+                    <div>
+                      <cms-contact-item class="col-sm-11" [contact]="contact"></cms-contact-item>
+                      <button type="button" class="btn btn-danger col-sm-2 deleteButton" (click)="onRemoveItem(i)" >X</button>
+                    </div>
+                  </div>
+                  <span class="dragMsg" *ngIf="groupContacts?.length < 1">Drag contacts in group here</span>
+                </div>
             </div>
-  
-          </div>
-        </div>
+            </div>
+
 
         <div *ngIf="!name.valid && name.touched || !email.valid && email.touched" class="alert alert-danger">
             The Name and Email fields are required.

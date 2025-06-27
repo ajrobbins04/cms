@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { DragDropService } from '../drag-drop.service';
 
 @Component({
   selector: 'cms-contact-list',
@@ -16,8 +15,7 @@ export class ContactListComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(
-    private contactService: ContactService,
-    private dragDropService: DragDropService
+    private contactService: ContactService
   ) {}
 
   ngOnInit() {
@@ -28,15 +26,6 @@ export class ContactListComponent implements OnInit {
         this.contacts = contacts;
       }
     );
-  }
-
-  get allContacts(): Contact[] {
-    return this.deptGroupedContacts.flatMap((group) => group.members);
-  }
-
-  onDragStart(contact: Contact) {
-    console.log('🔸 drag start RECEIVED');
-    this.dragDropService.setDraggedContact(contact);
   }
 
   // This method is called when a contact is selected in the contact-item component

@@ -3,8 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { DragDropService } from '../drag-drop.service';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'cms-contact-edit',
@@ -20,7 +19,6 @@ export class ContactEditComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
-    private dragDropService: DragDropService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -48,7 +46,7 @@ export class ContactEditComponent implements OnInit {
       this.contact = JSON.parse(JSON.stringify(this.originalContact));
 
       if (this.contact.group) {
-        this.groupContacts = JSON.parse(JSON.stringify(this.groupContacts));
+        this.groupContacts = JSON.parse(JSON.stringify(this.contact.group));
       }
     });
   }
@@ -75,23 +73,15 @@ export class ContactEditComponent implements OnInit {
     return false;
   }
 
-
-  addToGroup(event: CdkDragDrop<Contact[]>) {
-    const draggedContact = this.dragDropService.getDraggedContact();
-    if (this.isInvalidContact(draggedContact)) return;
-    this.groupContacts.push(draggedContact);
-  }
-
-  onDrop() {
+  onDrop(event: CdkDragDrop<Contact>) {
     console.log('🔸 drop event RECEIVED');
-    const draggedContact = this.dragDropService.getDraggedContact();
+    const draggedContact = event.item.data
 
     if (!draggedContact || this.isInvalidContact(draggedContact)) {
       return;
     }
 
     this.groupContacts.push(draggedContact);
-    this.dragDropService.clear();
   }
 
   onRemoveItem(index: number): void {
@@ -110,12 +100,12 @@ export class ContactEditComponent implements OnInit {
 
     // create a new Contact object
     const newContact = new Contact(
-      value.id,
+      null, // ID will be set later
       value.name,
       value.email,
       value.phone,
       value.imageUrl,
-      value.group
+      this.groupContacts
     );
 
     // check edit mode
