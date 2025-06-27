@@ -19,14 +19,41 @@ export class ContactListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.deptGroupedContacts = this.contactService.getGroupedContacts();
+    this.contacts = this.contactService.getContacts();
+    this.buildGroupedContacts();
+  
 
     this.subscription = this.contactService.contactListChangedEvent.subscribe(
       (contacts: Contact[]) => {
         this.contacts = contacts;
+        this.buildGroupedContacts();
       }
     );
   }
+
+  buildGroupedContacts(): void {
+
+    const departments = this.contactService.getDepartmentContacts();
+    // Identify all department-like groups
+    const deptGroups = departments.map(dept => ({
+        name: dept.name,
+        members: dept.group!
+      }));
+  
+    // Collect all member IDs from department groups
+    const memberIds = new Set(deptGroups.flatMap(g => g.members.map(m => m.id)));
+  
+    // Find ungrouped contacts (not in any dept group)
+    const otherMembers = this.contacts.filter(c => !memberIds.has(c.id) && (!c.group || c.group.length === 0));
+  
+    // Build the final grouped list
+    this.deptGroupedContacts = [...deptGroups];
+  
+    if (otherMembers.length > 0) {
+      this.deptGroupedContacts.push({ name: 'Other', members: otherMembers });
+    }
+  }
+  
 
   // This method is called when a contact is selected in the contact-item component
   onSelectedContact(contact: Contact) {

@@ -34,19 +34,6 @@ export class ContactService {
   getContacts(): Contact[] {
     return this.contacts.slice(); // Return a copy of the contacts array
   }
-  
-  getGroupedContacts() {
-      // retrieve each non-null group
-      const teams = this.contacts.filter(contact => contact.group);
-
-      // map each group to an object with its name and members
-      const groups = teams.map(team => ({
-          name: team.name,
-          members: team.group
-      }));
-
-      return groups;
-  }
 
   getContact(id: string): Contact {
     for (let contact of this.contacts) {
@@ -57,6 +44,12 @@ export class ContactService {
     return null; // Return null if no contact with the given ID is found
   }
 
+  getDepartmentContacts(): Contact[] {
+    return this.contacts.filter(contact =>
+      contact.group && contact.email.trim() === '' && contact.phone.trim() === ''
+    );
+  }
+  
   addContact(newContact: Contact) {
     if (!newContact) {
       return;

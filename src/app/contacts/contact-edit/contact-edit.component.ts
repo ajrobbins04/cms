@@ -74,10 +74,9 @@ export class ContactEditComponent implements OnInit {
   }
 
   onDrop(event: CdkDragDrop<Contact>) {
-    console.log('🔸 drop event RECEIVED');
     const draggedContact = event.item.data
 
-    if (!draggedContact || this.isInvalidContact(draggedContact)) {
+    if (this.isInvalidContact(draggedContact)) {
       return;
     }
 

@@ -21,16 +21,16 @@
           <div class="col-sm-12 form-group">
             <label for="email">Email:</label>
             <input
-              type="text"
-              id="email"
-              name="email"
-              [ngModel]="contact?.email"
-              #email="ngModel"
-              class="form-control required"
-              required
-              size="120"
-              max="255"
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                type="text"
+                id="email"
+                name="email"
+                [ngModel]="contact?.email"
+                #email="ngModel"
+                class="form-control required"
+                required
+                size="120"
+                max="255"
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
             <div *ngIf="email.touched && !email.valid" class="alert alert-danger">
                 Enter a valid Email address.
             </div>

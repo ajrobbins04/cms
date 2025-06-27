@@ -14,11 +14,11 @@
           <h4>{{ group.name }}</h4>
           
           <div
+            class="row"
             id="contactList"
             cdkDropList
-            [cdkDropListData]="contacts"
+            [cdkDropListData]="group.members"
             [cdkDropListConnectedTo]="['groupList']"
-            class="row available-contacts-zone"
           >
             <cms-contact-item
               *ngFor="let contact of group.members"
