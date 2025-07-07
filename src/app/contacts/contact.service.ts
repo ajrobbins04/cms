@@ -11,12 +11,14 @@ export class ContactService {
   contactSelectedEvent = new EventEmitter<Contact>();
   contactListChangedEvent = new Subject<Contact[]>();
 
-  maxContactId: number;
+  maxContactId: number; // number b/c must be able to increment
+  unspecifiedContactId: string;
   contacts: Contact[] = [];
 
   constructor() { 
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
+    this.unspecifiedContactId = this.getUnspecifiedID();
   }
 
   getMaxId(): number {
@@ -29,7 +31,18 @@ export class ContactService {
     }
 
     return maxId;
-}
+  }
+
+  // Returns the ID of the contact named 'Unspecified'
+  // This is used to assign a default department when no specific department is selected
+  getUnspecifiedID(): string {
+    for (let contact of this.contacts) {
+      if (contact.name === 'Unspecified') {
+        return contact.id; 
+      }
+    }
+    return null; // Return null if no contact named 'Unspecified' is found
+  }
 
   getContacts(): Contact[] {
     return this.contacts.slice(); // Return a copy of the contacts array
@@ -48,12 +61,15 @@ export class ContactService {
     if (!newContact) {
       return;
     }
+
     // Increment to ensure the new contact has a unique ID
     this.maxContactId++;
     newContact.id = this.maxContactId.toString();
 
     this.contacts.push(newContact);
 
+    const defaultDept = this.getContact(this.unspecifiedContactId);
+    defaultDept.group.push(newContact); // Add the new contact to the 'Unspecified' department
     // Emit a copy of the updated contacts list
     const contactsListClone = this.getContacts();
     this.contactListChangedEvent.next(contactsListClone);

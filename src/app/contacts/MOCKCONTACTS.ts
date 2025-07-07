@@ -313,6 +313,6 @@ export const MOCKCONTACTS: Contact[] = [
     isDept: true
   },
   {
-    id: '19', name: 'Unspecified', email: ' ', phone: ' ', imageUrl: ' ', group: null, isDept: true
+    id: '19', name: 'Unspecified', email: ' ', phone: ' ', imageUrl: ' ', group: [], isDept: true
   }
 ];
