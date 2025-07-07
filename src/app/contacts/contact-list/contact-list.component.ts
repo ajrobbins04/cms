@@ -12,6 +12,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
   deptGroupedContacts: { name: string; members: Contact[] }[] = [];
+  searchTerm: string;
   private subscription: Subscription;
 
   constructor(
@@ -34,6 +35,7 @@ export class ContactListComponent implements OnInit {
   buildGroupedContacts(): void {
 
     const departments = this.contactService.getDepartmentContacts();
+    
     // Identify all department-like groups
     const deptGroups = departments.map(dept => ({
         name: dept.name,
@@ -54,10 +56,14 @@ export class ContactListComponent implements OnInit {
     }
   }
   
-
   // This method is called when a contact is selected in the contact-item component
   onSelectedContact(contact: Contact) {
     this.contactService.contactSelectedEvent.emit(contact);
+  }
+
+  // Called by keyup event from the searchBox input field
+  search(value: string) {
+    this.searchTerm = value;
   }
 
   ngOnDestroy() {
