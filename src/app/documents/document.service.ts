@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter} from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
@@ -13,9 +14,8 @@ export class DocumentService {
   documentListChangedEvent = new Subject<Document[]>();
   documentSelectedEvent = new EventEmitter<Document>();
 
-  constructor() { 
-    this.documents = MOCKDOCUMENTS;
-    this.maxDocumentId = this.getMaxId();
+  constructor(private http: HttpClient) { 
+    this.getDocuments();
   }
 
   getMaxId(): number {
@@ -30,9 +30,29 @@ export class DocumentService {
     return maxId;
   }
 
-  getDocuments(): Document[] {
-    return this.documents.slice(); // Return a copy of the documents array
+  getDocuments() {
+    this.http.get<Document[]>('https://wdd430-cms-ajrobbins-default-rtdb.firebaseio.com/documents.json')
+      .subscribe(
+        // success callback
+        (documents: Document[]) => {
+          this.documents = documents;
+          this.maxDocumentId = this.getMaxId();
+          this.documents.sort((a, b) => {
+            if (a.name < b.name) return -1;             
+            if (a.name > b.name) return 1;
+            return 0;
+          });
+  
+
+          this.documentListChangedEvent.next(this.documents.slice());
+        },
+        // error callback
+        (error: any) => {
+          console.error('Error fetching documents:', error);
+        }
+      );
   }
+  
 
   getDocument(id: string): Document {
     for (let document of this.documents) {
@@ -66,7 +86,7 @@ export class DocumentService {
     }
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
-    
+
     const documentsListClone = this.documents.slice();
     this.documentListChangedEvent.next(documentsListClone);
   }
