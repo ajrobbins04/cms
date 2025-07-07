@@ -9,9 +9,10 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
   templateUrl: './contact-list.component.html',
   styleUrls: ['../../app.component.css', './contact-list.component.css'],
 })
+
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
-  deptGroupedContacts: { name: string; members: Contact[] }[] = [];
+
   searchTerm: string;
   private subscription: Subscription;
 
@@ -21,39 +22,18 @@ export class ContactListComponent implements OnInit {
 
   ngOnInit() {
     this.contacts = this.contactService.getContacts();
-    this.buildGroupedContacts();
   
-
     this.subscription = this.contactService.contactListChangedEvent.subscribe(
       (updatedContacts: Contact[]) => {
         this.contacts = updatedContacts;
-        this.buildGroupedContacts();
       }
     );
   }
 
-  buildGroupedContacts(): void {
-
-    const departments = this.contactService.getDepartmentContacts();
-    
-    // Identify all department-like groups
-    const deptGroups = departments.map(dept => ({
-        name: dept.name,
-        members: dept.group!
-      }));
-  
-    // Collect all member IDs from department groups
-    const memberIds = new Set(deptGroups.flatMap(g => g.members.map(m => m.id)));
-  
-    // Find ungrouped contacts (not in any dept group)
-    const otherMembers = this.contacts.filter(c => !memberIds.has(c.id) && (!c.group || c.group.length === 0));
-  
-    // Build the final grouped list
-    this.deptGroupedContacts = [...deptGroups];
-  
-    if (otherMembers.length > 0) {
-      this.deptGroupedContacts.push({ name: 'Other', members: otherMembers });
-    }
+  findDepartments(): Contact[] {
+    return this.contacts.filter(contact =>
+      contact.isDept && contact.group && contact.group.length > 0
+    );
   }
   
   // This method is called when a contact is selected in the contact-item component

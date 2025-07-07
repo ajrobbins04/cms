@@ -43,13 +43,7 @@ export class ContactService {
     }
     return null; // Return null if no contact with the given ID is found
   }
-
-  getDepartmentContacts(): Contact[] {
-    return this.contacts.filter(contact =>
-      contact.group && contact.email.trim() === '' && contact.phone.trim() === ''
-    );
-  }
-
+  
   addContact(newContact: Contact) {
     if (!newContact) {
       return;

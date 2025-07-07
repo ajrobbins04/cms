@@ -25,18 +25,18 @@
 
     </div>
     <div class="panel-body">
-        <div *ngFor="let group of deptGroupedContacts">
-          <h4>{{ group.name }}</h4>
+        <div *ngFor="let dept of contacts | contactsFilter: searchTerm">
+          <h4>{{ dept.name }}</h4>
           
           <div
             class="row"
             id="contactList"
             cdkDropList
-            [cdkDropListData]="group.members"
+            [cdkDropListData]="dept.members"
             [cdkDropListConnectedTo]="['groupList']"
           >
             <cms-contact-item
-              *ngFor="let contact of group.members | contactsFilter: searchTerm"
+              *ngFor="let contact of dept.members"
               [contact]="contact"
               cdkDrag
               [cdkDragData]="contact"
