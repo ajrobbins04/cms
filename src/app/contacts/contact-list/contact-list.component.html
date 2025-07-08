@@ -5,18 +5,20 @@
                 <h3 class="panel-title">Contacts</h3>
             </div>
         </div>
-        <div class="row vcenter">
-        <div class="input-group pull-left col-xs-7 col-md-8">
+        <div class="vcenter">
+        <div class="input-group pull-left col-sm-12 col-md-8">
             <input
                 #searchBox
                 type="text"
                 class="form-control"
                 placeholder="Enter a search value"
                 (keyup)="search(searchBox.value)">
-            <div
-                class="glyphicon glyphicon-search input-group-addon" 
-                (click)="search(searchBox.value)">
-            </div>
+
+            <span class="input-group-btn">
+                <button class="btn btn-default" (click)="search(searchBox.value)">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
         </div>
         <div class="col-md-4 text-right">
             <button class="btn btn-success" routerLink="new">New Contact</button>
