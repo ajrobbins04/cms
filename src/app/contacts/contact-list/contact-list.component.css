@@ -5,3 +5,9 @@ h3 {
 h4 {
     margin: 2rem 0 2rem 0;
 }
+
+.panel-subtitle {
+    font-size: 20px;
+    color: #555;
+
+}
