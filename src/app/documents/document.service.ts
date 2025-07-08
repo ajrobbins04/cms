@@ -52,7 +52,6 @@ export class DocumentService {
         }
       );
   }
-  
 
   getDocument(id: string): Document {
     for (let document of this.documents) {
@@ -63,6 +62,23 @@ export class DocumentService {
     return null; // Return null if no document with the given ID is found
   }
 
+  storeDocuments() {
+    // Must convert to JSON string since data must be in this format for Firebase
+    const documentsString = JSON.stringify(this.documents);
+  
+    // Set headers for the request
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+    // Send the PUT request to update the documents
+    this.http
+      .put('https://wdd430-cms-ajrobbins-default-rtdb.firebaseio.com/documents.json', documentsString, { headers })
+      .subscribe(() => {
+        // Returns observable b/c the PUT request is asynchronous
+        this.documentListChangedEvent.next(this.documents.slice());
+      });
+  }
+  
+
   addDocument(newDocument: Document) {
     if (!newDocument) {
         return;
@@ -71,9 +87,8 @@ export class DocumentService {
     newDocument.id = this.maxDocumentId.toString();
 
     this.documents.push(newDocument);
-
-    const documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
+    
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
@@ -86,10 +101,9 @@ export class DocumentService {
     }
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
-
-    const documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
-  }
+    this.storeDocuments();
+    
+  } 
 
   deleteDocument(document: Document) {
     if (!document) {
@@ -100,8 +114,6 @@ export class DocumentService {
       return;
     }
     this.documents.splice(pos, 1);
-
-    const documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
   }
 }
