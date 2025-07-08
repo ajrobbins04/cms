@@ -9,6 +9,8 @@ import { MessageService } from '../../message.service';
 })
 export class MessageEditComponent {
 
+  currentSender = '5'; // Hardcoded for now, could be dynamic later
+
   @Output() addMessageEvent = new EventEmitter<Message>();
 
   // Using ViewChild to get a reference to the input elements from the DOM
@@ -22,9 +24,10 @@ export class MessageEditComponent {
     event.preventDefault();
     const subjectVal = this.subjectRef.nativeElement.value;
     const msgTextVal = this.msgTextRef.nativeElement.value;
-    const newMessage = new Message('6', subjectVal, msgTextVal, '1');
+    const newMessage = new Message(null, subjectVal, msgTextVal, this.currentSender);
 
     this.messageService.addMessage(newMessage);
+    this.onClear();
   }
 
   onClear() {

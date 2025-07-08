@@ -94,6 +94,7 @@ export class ContactEditComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log('Submitting contact form...');
     // get values from form's value object
     const value = form.value;
 

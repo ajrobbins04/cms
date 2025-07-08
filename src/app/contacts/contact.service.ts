@@ -1,4 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Contact } from './contact.model';
 import {MOCKCONTACTS} from './MOCKCONTACTS';
@@ -15,10 +16,7 @@ export class ContactService {
   unspecifiedContactId: string;
   contacts: Contact[] = [];
 
-  constructor() { 
-    this.contacts = MOCKCONTACTS;
-    this.maxContactId = this.getMaxId();
-    this.unspecifiedContactId = this.getUnspecifiedID();
+  constructor(private http: HttpClient) { 
   }
 
   getMaxId(): number {
@@ -36,17 +34,27 @@ export class ContactService {
   // Returns the ID of the contact named 'Unspecified'
   // This is used to assign a default department when no specific department is selected
   getUnspecifiedID(): string {
-    for (let contact of this.contacts) {
-      if (contact.name === 'Unspecified') {
-        return contact.id; 
-      }
-    }
-    return null; // Return null if no contact named 'Unspecified' is found
+    const defaultDept = this.contacts.find(c => c.name === 'Unspecified');
+    return defaultDept?.id;
   }
 
-  getContacts(): Contact[] {
-    return this.contacts.slice(); // Return a copy of the contacts array
+  getContacts() {
+    this.http
+      .get<Contact[]>('https://wdd430-cms-ajrobbins-default-rtdb.firebaseio.com/contacts.json')
+      .subscribe(
+        (contacts: Contact[]) => {
+          this.contacts = contacts || [];
+          this.maxContactId = this.getMaxId();
+          this.unspecifiedContactId = this.getUnspecifiedID();
+  
+          this.contactListChangedEvent.next(this.contacts.slice());
+        },
+        (error) => {
+          console.error('Error fetching contacts:', error);
+        }
+      );
   }
+  
 
   getContact(id: string): Contact {
     for (let contact of this.contacts) {
@@ -57,10 +65,23 @@ export class ContactService {
     return null; // Return null if no contact with the given ID is found
   }
   
+  storeContacts() {
+    console.log('Storing contacts to Firebase', this.contacts);
+    const contactsJson = JSON.stringify(this.contacts);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  
+    this.http
+      .put('https://wdd430-cms-ajrobbins-default-rtdb.firebaseio.com/contacts.json', contactsJson, { headers })
+      .subscribe(() => {
+        this.contactListChangedEvent.next(this.contacts.slice());
+      });
+  }
+  
   addContact(newContact: Contact) {
     if (!newContact) {
       return;
     }
+    console.log('addContact called', newContact);
 
     // Increment to ensure the new contact has a unique ID
     this.maxContactId++;
@@ -69,10 +90,17 @@ export class ContactService {
     this.contacts.push(newContact);
 
     const defaultDept = this.getContact(this.unspecifiedContactId);
+
+    // Ensure the default department group array exists
+    if (defaultDept) {
+      if (!Array.isArray(defaultDept.group)) {
+        defaultDept.group = [];
+      }
+    }
+    
     defaultDept.group.push(newContact); // Add the new contact to the 'Unspecified' department
-    // Emit a copy of the updated contacts list
-    const contactsListClone = this.getContacts();
-    this.contactListChangedEvent.next(contactsListClone);
+    
+    this.storeContacts(); // Store the updated contacts list and emit the change
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -100,8 +128,7 @@ export class ContactService {
       }
     });
 
-    // Emit a copy of the updated contacts list
-    this.contactListChangedEvent.next(this.getContacts());
+    this.storeContacts(); // Store the updated contacts list and emit the change
 }
 
   deleteContact(contact: Contact) {
@@ -123,6 +150,6 @@ export class ContactService {
       }
     });
 
-    this.contactListChangedEvent.next(this.getContacts());
+    this.storeContacts(); // Store the updated contacts list and emit the change
   }
 }
