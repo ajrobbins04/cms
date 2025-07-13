@@ -5,6 +5,8 @@ var http = require('http');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+var dotenv = require('dotenv').config(); // Load environment variables from .env file
 
 // import the routing file to handle the default (index) route
 var index = require('./server/routes/app');
@@ -52,6 +54,16 @@ app.use('/documents', documentRoutes);
 // Tell express to map all other non-defined routes back to the index page
 app.get('*splat', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/cms/browser/index.html'));
+});
+
+// Connect to the MongoDB database
+mongoose.connect(process.env.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('Connected to Database!');
+}).catch(err => {
+  console.error('Connection failed:', err);
 });
 
 // Define the port address and tell express to use this port
