@@ -1,51 +1,48 @@
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="row vcenter">
-            <div class="col-xs-12">
-                <h3 class="panel-title">Contacts</h3>
-            </div>
-        </div>
-        <div class="vcenter">
-        <div class="input-group pull-left col-sm-12 col-md-8">
-            <input
-                #searchBox
-                type="text"
-                class="form-control"
-                placeholder="Enter a search value"
-                (keyup)="search(searchBox.value)">
-
-            <span class="input-group-btn">
-                <button class="btn btn-default" (click)="search(searchBox.value)">
-                    <span class="glyphicon glyphicon-search"></span>
-                </button>
-            </span>
-        </div>
-        <div class="col-md-4 text-right">
-            <button class="btn btn-success" routerLink="new">New Contact</button>
-        </div>
-        </div>
-
-    </div>
-    <div class="panel-body">
-        <div *ngFor="let dept of contacts | contactsFilter: searchTerm">
-          <h4 class="panel-subtitle">{{ dept.name }}</h4>
-          
-          <div
-            class="row"
-            id="contactList"
-            cdkDropList
-            [cdkDropListData]="dept.members"
-            [cdkDropListConnectedTo]="['groupList']"
-          >
-            <cms-contact-item
-              *ngFor="let contact of dept.members"
-              [contact]="contact"
-              cdkDrag
-              [cdkDragData]="contact"
-            ></cms-contact-item>
-          </div>
-        </div>
+  <div class="panel-heading">
+    <div class="row vcenter">
+      <div class="col-xs-12">
+        <h3 class="panel-title">Contacts</h3>
       </div>
-      
-</div>
+    </div>
+    <div class="vcenter">
+      <div class="input-group pull-left col-sm-12 col-md-8">
+        <input
+          #searchBox
+          type="text"
+          class="form-control"
+          placeholder="Enter a search value"
+          (keyup)="search(searchBox.value)"
+        />
+        <span class="input-group-btn">
+          <button class="btn btn-default" (click)="search(searchBox.value)">
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+      <div class="col-md-4 text-right">
+        <button class="btn btn-success" routerLink="new">New Contact</button>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div *ngFor="let dept of contacts | contactsFilter : searchTerm">
+      <h4 class="panel-subtitle">{{ dept.name }}</h4>
 
+      <div
+        class="row"
+        id="contactList"
+        cdkDropList
+        [cdkDropListData]="dept.members"
+        [cdkDropListConnectedTo]="['groupList']"
+      >
+        <cms-contact-item
+          *ngFor="let contact of dept.members"
+          [contact]="contact"
+          cdkDrag
+          [cdkDragData]="contact"
+        ></cms-contact-item>
+      </div>
+    </div>
+  </div>
+</div>

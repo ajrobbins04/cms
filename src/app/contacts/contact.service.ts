@@ -22,7 +22,7 @@ export class ContactService {
         this.contacts = (responseData.contacts || []).map(contact => {
 
           // If imageUrl is null or undefined, set it to an empty string
-          if (contact.imageUrl === null || contact.imageUrl === undefined) {
+          if (!contact.imageUrl === null || contact.imageUrl === undefined) {
             contact.imageUrl = '';
           }
           return contact;

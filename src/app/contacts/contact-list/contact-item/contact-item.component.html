@@ -7,7 +7,7 @@
     <div class="media-body">
       <h4 class="media-heading">{{ contact.name }}</h4>
     </div>
-    <div class="media-right" *ngIf="contact.imageUrl !== ''">
+    <div class="media-right" *ngIf="contact.imageUrl">
       <img 
         [src]="contact.imageUrl"
         [alt]="contact.name"
