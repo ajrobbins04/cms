@@ -15,6 +15,7 @@ export class MessageItemComponent implements OnInit {
   constructor(private contactService: ContactService) { }
   
   ngOnInit(): void {
+      // Fetch the sender's name embedded in the message
       this.messageSender = this.message.sender.name || 'Unknown';
   }
 }

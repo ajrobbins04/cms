@@ -7,9 +7,12 @@
                   </div>
             </div>
             <div class="media">
-                <div class="media-left">
-                    <img *ngIf="contact.imageUrl" src="{{ contact?.imageUrl }}" alt="{{ contact?.name }}" style="max-width: 75px;">
-                </div>
+                <div class="media-left" *ngIf="contact.imageUrl !== ''">
+                    <img 
+                         [src]="contact.imageUrl" 
+                         [alt]="contact.name" 
+                         style="max-width: 75px;">
+                </div>                  
                 <div class="media-body media-vcenter">
                     <div class="pull-right">
                         <a class="btn btn-primary" style="margin-right: 5px;" routerLink="edit">Edit</a>

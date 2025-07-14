@@ -38,7 +38,8 @@ export class ContactListComponent implements OnInit {
   
   // This method is called when a contact is selected in the contact-item component
   onSelectedContact(contact: Contact) {
-    this.contactService.contactSelectedEvent.emit(contact);
+    const contactCopy = JSON.parse(JSON.stringify(contact));
+    this.contactService.contactSelectedEvent.emit(contactCopy);
   }
 
   // Called by keyup event from the searchBox input field

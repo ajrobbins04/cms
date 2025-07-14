@@ -16,18 +16,18 @@ export class MessageService {
   }
 
   getMessages() {
-    this.http.get<Message[]>('http://localhost:3000/messages').subscribe(
-      (messages: Message[]) => {
-        this.messages = messages || [];
-
-        this.messageChangedEvent.emit(this.messages.slice());
-      },
-      (error) => {
-        console.error('Error fetching messages:', error);
-      }
-    );
+    this.http.get<{ message: string; messages: Message[] }>('http://localhost:3000/messages')
+      .subscribe({
+        next: (responseData) => {
+          this.messages = responseData.messages;
+          this.messageChangedEvent.emit(this.messages.slice());
+        },
+        error: (err) => {
+          console.error('Error fetching messages:', err);
+        }
+      });
   }
-
+  
   getMessage(id: string): Message {
     for (let message of this.messages) {
       if (message.id === id) {
@@ -56,9 +56,7 @@ export class MessageService {
         next: (responseData) => {
           // Add new message to local array
           const savedMessage = responseData.msg;
-          this.messages.push(savedMessage);
-
-          this.messageChangedEvent.next(this.messages.slice());
+          this.getMessages(); // Refresh messages from server
         },
         error: (error) => {
           console.error('Failed to add contact:', error);

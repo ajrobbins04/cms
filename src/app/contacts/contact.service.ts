@@ -15,13 +15,18 @@ export class ContactService {
   constructor(private http: HttpClient) {}
 
   getContacts() {
-    this.http.get<Contact[]>('http://localhost:3000/contacts').subscribe({
-      next: (contacts: Contact[]) => {
-        if (!contacts) {
-          console.log('No contacts found');
-          return;
-        }
-        this.contacts = contacts;
+    this.http.get<{ message: String; contacts: Contact[]}>('http://localhost:3000/contacts')
+    .subscribe({
+      next: (responseData) => {
+        // Normalize imageUrl for each contact
+        this.contacts = (responseData.contacts || []).map(contact => {
+
+          // If imageUrl is null or undefined, set it to an empty string
+          if (contact.imageUrl === null || contact.imageUrl === undefined) {
+            contact.imageUrl = '';
+          }
+          return contact;
+        });
         this.contactListChangedEvent.next(this.contacts.slice());
       },
       error: (error) => { 
@@ -30,17 +35,55 @@ export class ContactService {
     });
   }
   
-  
   getContact(id: string): Contact {
     return this.contacts.find(contact => contact['id'] === id) || null;
   }
  
-  addContact(contact: Contact) {
+  // Helper method to assign a contact to the default "Unspecified" department
+  // Functionality to assign a contact to other departments can be added later
+  assignToDefaultDepartment(contact: Contact): void {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const defaultDept = this.contacts.find(c => c.name === 'Unspecified');
+  
+    if (!defaultDept) {
+      console.error('No default department ("Unspecified") found.');
+      return;
+    }
+  
+    // Ensure the group exists and is an array
+    if (!Array.isArray(defaultDept.group)) {
+      defaultDept.group = [];
+    }
+  
+    defaultDept.group.push(contact);
+
+    const updatedDept = {
+      ...defaultDept,
+      group: defaultDept.group.map(member => member['_id'])  // just ObjectIds
+    };
+
+    // Update the Unspecified department contact on the server
+    this.http.put(
+      'http://localhost:3000/contacts/' + defaultDept.id,
+      defaultDept,
+      { headers }
+    ).subscribe({
+      next: () => {
+        console.log('Default department updated');
+        this.getContacts(); // Refresh local contacts list (also ensures group updates)
+      },
+      error: (error) => {
+        console.error('Failed to update department group:', error);
+      }
+    });
+  }
+  
+  addContact(contact: Contact): void {
     if (!contact) {
       return;
     }
   
-    contact.id = ''; // Let the backend assign the ID
+    contact.id = ''; // Backend assigns the ID
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
   
     this.http
@@ -53,41 +96,17 @@ export class ContactService {
         next: (responseData) => {
           const savedContact = responseData.contact;
           this.contacts.push(savedContact);
-  
-          // Add the new contact to the 'Unspecified' department if no team is set
-          const defaultDept = this.contacts.find(c => c.name === 'Unspecified');
-
-          // If the contact is a department, ensure it has a group array
-          if (defaultDept) {
-            if (!Array.isArray(defaultDept.group)) {
-              defaultDept.group = [];
-            }
-            defaultDept.group.push(savedContact);
-  
-            // Update the Unspecified contact group via PUT request
-            this.http
-              .put(
-                'http://localhost:3000/contacts/' + defaultDept.id,
-                defaultDept,
-                { headers }
-              )
-              .subscribe({
-                next: () => {
-                  console.log('Default department updated');
-                  this.contactListChangedEvent.next(this.contacts.slice());
-                },
-                error: (error) => {
-                  console.error('Failed to update department group:', error);
-                }
-              });
-          }
+          console.log('current contacts:', this.contacts.map(c => c.name));
+          
+          // Assign new contact to "Unspecified" department 
+          // and emits the updated list
+          this.assignToDefaultDepartment(savedContact);
         },
         error: (error) => {
           console.error('Failed to add contact:', error);
         }
       });
-  }
-  
+  }  
 
   updateContact(originalContact: Contact, newContact: Contact) {
     if (!originalContact || !newContact) {

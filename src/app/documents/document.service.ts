@@ -17,9 +17,11 @@ export class DocumentService {
   }
 
   getDocuments() {
-    this.http.get<Document[]>('http://localhost:3000/documents').subscribe({
-      next: (documents: Document[]) => {
-        this.documents = documents;
+    this.http.get<{message: String; documents: Document[] }>('http://localhost:3000/documents')
+    .subscribe({
+      next: (responseData) => {
+
+        this.documents = responseData.documents || [];
   
         this.documents.sort((a, b) => {
           if (a.name < b.name) return -1;
@@ -62,6 +64,7 @@ export class DocumentService {
         next: (responseData) => {
           // Add new document to local array
           this.documents.push(responseData.document);
+          this.documentListChangedEvent.next(this.documents.slice());
         },
         error: (error) => {
           console.error('Failed to add document:', error);
@@ -93,6 +96,8 @@ export class DocumentService {
       .subscribe({
         next: (response) => {
           this.documents[pos] = newDocument;
+          this.documentListChangedEvent.next(this.documents.slice());
+
         },
         error: (error) => {
           console.error('Error updating document:', error);
@@ -115,6 +120,7 @@ export class DocumentService {
       .subscribe({
         next: (response) => {
           this.documents.splice(pos, 1);
+          this.documentListChangedEvent.next(this.documents.slice());
         },
         error: (error) => {
           console.error('Error deleting document:', error);

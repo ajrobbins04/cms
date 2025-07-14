@@ -11,11 +11,11 @@ import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
   styleUrl: './contact-edit.component.css',
 })
 export class ContactEditComponent implements OnInit {
+
   originalContact: Contact; // unedited contact
   contact: Contact; // edited
   groupContacts: Contact[] = [];
   editMode: boolean = false;
-  id: string;
 
   constructor(
     private contactService: ContactService,

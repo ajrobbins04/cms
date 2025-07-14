@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges} from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
@@ -10,7 +10,7 @@ import { ContactService } from '../contact.service';
     './contact-detail.component.css'
   ]
 })
-export class ContactDetailComponent implements OnInit{
+export class ContactDetailComponent implements OnInit, OnChanges {
   @Input() contact: Contact;
 
   constructor(private contactService: ContactService,
@@ -29,6 +29,14 @@ export class ContactDetailComponent implements OnInit{
         }
       }
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['contact'] && changes['contact'].currentValue) {
+      const updatedContact = changes['contact'].currentValue;
+      console.log('Contact changed to:', updatedContact);
+      // You could add more logic here if needed, like refreshing local display values
+    }
   }
 
   onDelete() {

@@ -62,6 +62,8 @@ router.post('/', async (req, res, next) => {
 // PUT to update an existing contact
 router.put('/:id', async (req, res, next) => {
   try {
+
+    // Find the contact by string id
     const contact = await Contact.findOne({ id: req.params.id }).exec();
 
     if (!contact) {
@@ -71,11 +73,12 @@ router.put('/:id', async (req, res, next) => {
       });
     }
 
-    // Resolve group ids
     let groupIds = [];
     if (req.body.group && req.body.group.length > 0) {
-      groupIds = await Promise.all(req.body.group.map(async contactId => {
-        const groupContact = await Contact.findOne({ id: contactId });
+      
+      // Convert group string ids to actual ObjectIds
+      groupIds = await Promise.all(req.body.group.map(async _id => {
+        const groupContact = await Contact.findById(_id);
         return groupContact ? groupContact._id : null;
       }));
       groupIds = groupIds.filter(id => id !== null);
@@ -103,6 +106,7 @@ router.put('/:id', async (req, res, next) => {
     });
   }
 });
+
 
 // DELETE a contact by ID
 router.delete('/:id', async (req, res, next) => {
