@@ -20,7 +20,6 @@ export class MessageListComponent implements OnInit {
           this.messages = messages;
         }
       );
-
   }
 
   onAddMessage(message: Message) {

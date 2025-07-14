@@ -1,71 +1,68 @@
 const Sequence = require('../models/sequence');
 
-var maxDocumentId;
-var maxContactId;
-var maxMessageId;
-var sequenceId = null;
+class SequenceGenerator {
+    constructor() {
+        this.sequenceId = null; // will be set after fetching from the database
+        this.maxDocumentId = 0; // default values
+        this.maxContactId = 0;
+        this.maxMessageId = 0;
+    }
+    
+    async initializeGenerator() {
+        try {
+            const seq = await Sequence.findOne().exec();
 
-function SequenceGenerator() {
-    this.maxDocumentId = 0; // default values
-    this.maxContactId = 0; 
-    this.maxMessageId = 0; 
+            if (seq) {
+                this.sequenceId = seq._id;
+                this.maxDocumentId = seq.maxDocumentId;
+                this.maxContactId = seq.maxContactId;
+                this.maxMessageId = seq.maxMessageId;
+
+            } else {
+                console.error('No sequence document found');
+            }
+        } catch (err) {
+            console.error('Failed to fetch max ID:', err);
+        }
+    }
+    async nextId(collectionType) {
+        let dbFieldName;
+
+        switch (collectionType) {
+            case 'documents':
+                dbFieldName = 'maxDocumentId';
+                break;
+            case 'messages':
+                dbFieldName = 'maxMessageId';
+                break;
+            case 'contacts':
+                dbFieldName = 'maxContactId';
+                break;
+            default:
+                return -1;
+        }
+
+        try {
+            const updatedSequence = await Sequence.findOneAndUpdate(
+                { _id: this.sequenceId },
+                { $inc: { [dbFieldName]: 1 } },
+                { new: true }
+            ).exec();
+
+            if (!updatedSequence) {
+                throw new Error('Sequence document not found');
+            }
+
+            // Update local copy
+            this[dbFieldName] = updatedSequence[dbFieldName];
+            return updatedSequence[dbFieldName];
+
+        } catch (err) {
+            console.error('Error generating next ID:', err);
+            throw err;
+        }
+    }
 }  
 
-SequenceGenerator.prototype.initializeGenerator = async function () {
-  try {
-    const sequence = await Sequence.findOne().exec();
-
-    if (sequence) {
-        this.maxDocumentId = sequence.maxDocumentId;
-        this.maxContactId = sequence.maxContactId;
-        this.maxMessageId = sequence.maxMessageId;
-        this.sequenceId = sequence._id;
-      
-    } else {
-      console.error('No sequence document found');
-    }
-  } catch (err) {
-    console.error('Failed to fetch max ID:', err);
-  }
-};
-
-SequenceGenerator.prototype.nextId = async function(collectionType) {
-
-  var updateObject = {};
-  var nextId;
-  
-  switch (collectionType) {
-    case 'documents':
-      this.maxDocumentId++;
-      updateObject = {maxDocumentId: maxDocumentId};
-      nextId = this.maxDocumentId;
-      break;
-    case 'messages':
-      this.maxMessageId++;
-      updateObject = {maxMessageId: maxMessageId};
-      nextId = this.maxMessageId;
-      break;
-    case 'contacts':
-      this.maxContactId++;
-      updateObject = {maxContactId: maxContactId};
-      nextId = this.maxContactId;
-      break;
-    default:
-      return -1;
-  }
-  
-  Sequence.update({_id: sequenceId}, {$set: updateObject},
-      function(err) {
-        if (err) {
-          console.log("nextId error = " + err);
-          return null
-        }
-      });
-      return nextId;
-
-};
-
-// export the singleton instance and initialize it
-const sequenceGeneratorInstance = new SequenceGenerator();
-sequenceGeneratorInstance.initializeGenerator(); 
-module.exports = sequenceGeneratorInstance;
+const sequenceGenerator = new SequenceGenerator();
+module.exports = sequenceGenerator;

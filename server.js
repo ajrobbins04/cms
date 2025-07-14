@@ -14,6 +14,7 @@ var index = require('./server/routes/app');
 const messageRoutes = require('./server/routes/messages');
 const contactRoutes = require('./server/routes/contacts');
 const documentRoutes = require('./server/routes/documents');
+const sequenceGenerator = require('./server/routes/sequenceGenerator');
 
 var app = express(); // create an instance of express
 
@@ -60,8 +61,11 @@ app.get('*splat', (req, res) => {
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(() => {
+}).then(async() => {
   console.log('Connected to Database!');
+
+  // Initialize the sequence generator
+  await sequenceGenerator.initializeGenerator();
 }).catch(err => {
   console.error('Connection failed:', err);
 });

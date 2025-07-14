@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { Message } from '../../message.model';
 import { MessageService } from '../../message.service';
+import mongoose from 'mongoose';
 
 @Component({
   selector: 'cms-message-edit',
@@ -9,7 +10,7 @@ import { MessageService } from '../../message.service';
 })
 export class MessageEditComponent {
 
-  currentSender = '5'; // Hardcoded for now, could be dynamic later
+  currentSender = {name: 'Amber Robbins'}; 
 
   @Output() addMessageEvent = new EventEmitter<Message>();
 
